@@ -38,12 +38,7 @@ public class BasePage extends DriverFactory {
         if (_driver != null) {
             this.wait = new WebDriverWait(_driver, 30);
             jsExecutor = ((JavascriptExecutor) _driver);
-        } else if (_appiumDriver != null) {
-            this.wait = new WebDriverWait(_appiumDriver, 30);
-            jsExecutor = ((JavascriptExecutor) _appiumDriver);
-            _driver = _appiumDriver;
         }
-
     }
 
     public void hoverOver(WebElement element) {
@@ -92,7 +87,7 @@ public class BasePage extends DriverFactory {
         }
     }
 
-    public void waitAndClickElement(WebElement element, boolean withoutFrame) {
+    public void waitAndClickElement(WebElement element) {
         boolean clicked = false;
         int attempts = 0;
         while (!clicked && attempts < 10) {
@@ -114,7 +109,7 @@ public class BasePage extends DriverFactory {
             this.WaitUntilWebElementIsVisible(element);
             Select select = new Select(element);
             select.selectByIndex(index);
-            waitForPageComponentLoadFluentWait();
+
         } catch (Exception e) {
             System.out.println("Unable to find the object");
             Assert.fail("Unable to find the object: " + e.getMessage());
@@ -126,39 +121,27 @@ public class BasePage extends DriverFactory {
     public void selectFromDropDownbyValue(WebElement element, String value) {
         Select select;
         try {
-            waitForPageComponentLoadFluentWait();
+            //waitForPageComponentLoadFluentWait();
             //actionClick(element);
-            this.WaitUntilWebElementIsVisible(element);
+            //this.WaitUntilWebElementIsVisible(element);
             try {
                 select = new Select(element);
                 select.selectByVisibleText(value);
-                waitForPageComponentLoadFluentWait();
+               // waitForPageComponentLoadFluentWait();
             } catch (StaleElementReferenceException staleElement) {
                 element = getUpdatedReferenceOfStaleElement(element);
                 select = new Select(element);
-                waitForPageComponentLoadFluentWait();
+               // waitForPageComponentLoadFluentWait();
                 select.selectByVisibleText(value);
-                waitForPageComponentLoadFluentWait();
+               // waitForPageComponentLoadFluentWait();
             }
         } catch (Exception e) {
             System.out.println("Unable to find the object");
             Assert.fail("Unable to find the object: " + e.getMessage());
         }
-        waitForPageComponentLoadFluentWait();
+        //waitForPageComponentLoadFluentWait();
     }
 
-    public void scroll() {
-        Dimension dimensions = _appiumDriver.manage().window().getSize();
-        int Startpoint = (int) (dimensions.getHeight() * 0.5);
-        int scrollEnd = (int) (dimensions.getHeight() * 0.2);
-
-        new TouchAction((PerformsTouchActions) _appiumDriver)
-                .press(PointOption.point(0, Startpoint))
-                .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(2)))
-                .moveTo(PointOption.point(0, scrollEnd))
-                .release().perform();
-        System.out.println("Scroll done");
-    }
 
     public boolean checkIsDisplayed(WebElement element) {
         boolean eleFound = element.isDisplayed();
@@ -344,7 +327,8 @@ public class BasePage extends DriverFactory {
 
     public void sendKeysToWebElement(WebElement element, String textToSend) {
         try {
-            element.clear();
+            wait.until(ExpectedConditions.elementToBeClickable(element));
+            //element.clear();
             element.sendKeys(textToSend);
             //sendTABKey(element);
             System.out.println("Successfully Sent the following keys: '" + textToSend + "' to element: " + "<" + element.toString() + ">");
@@ -478,29 +462,6 @@ public class BasePage extends DriverFactory {
         }
     }
 
-    public void clickOnCloseInPopup() {
-        if (_platFormName.equalsIgnoreCase("ios")) {
-            switchToNativeApp();
-            _appiumDriver.findElementByName("Close").click();
-            switchToWebView();
-        } else if (_platFormName.equalsIgnoreCase("android")) {
-            if (isAlertPresent()) {
-                try {
-                    closeAlertPopupBox();
-                } catch (AWTException | InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            if (isAlertPresent()) {
-                try {
-                    closeAlertPopupBox();
-                } catch (AWTException | InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
 
     public boolean isElementClickable(WebElement element) {
         try {
@@ -520,10 +481,6 @@ public class BasePage extends DriverFactory {
 
     public BasePage loadUrl(String url) throws IOException {
         _driver.get(url);
-        return new BasePage();
-    }
-    public BasePage enterUserName(String username) throws IOException {
-        _driver.get(username);
         return new BasePage();
     }
 
@@ -626,9 +583,9 @@ public class BasePage extends DriverFactory {
     public String getDefaultSelectedOptionForDropDown(WebElement element) {
         try {
             jsExecutor.executeScript("arguments[0].scrollIntoView(true);", element);
-            waitForPageComponentLoadFluentWait();
+            /*waitForPageComponentLoadFluentWait();
             this.WaitUntilWebElementIsVisible(element);
-            waitForPageComponentLoadFluentWait();
+            waitForPageComponentLoadFluentWait();*/
             Select select = new Select(element);
             WebElement option = select.getFirstSelectedOption();
             String defaultItem = option.getText().trim();
@@ -637,9 +594,9 @@ public class BasePage extends DriverFactory {
             WebElement staleElement = getUpdatedReferenceOfStaleElement(element);
             handleStaleExceptionError(staleElement);
             jsExecutor.executeScript("arguments[0].scrollIntoView(true);", staleElement);
-            waitForPageComponentLoadFluentWait();
+            /*waitForPageComponentLoadFluentWait();
             this.WaitUntilWebElementIsVisible(staleElement);
-            waitForPageComponentLoadFluentWait();
+            waitForPageComponentLoadFluentWait();*/
             Select select = new Select(element);
             WebElement option = select.getFirstSelectedOption();
             String defaultItem = option.getText().trim();
@@ -1327,73 +1284,6 @@ public class BasePage extends DriverFactory {
         }
     }
 
-    public void scrollToView(WebElement element, WebElement topElement) {
-        Dimension dimensions = _appiumDriver.manage().window().getSize();
-        int Startpoint = (int) (dimensions.getHeight() * 0.5);
-        int scrollEnd = (int) (dimensions.getHeight() * 0.2);
-        int fromX = 10;
-        int fromY = 400;
-        int endX = 10;
-        int endY = 2000;
-        boolean scrollUp = true;
-        boolean elementFound = false;
-        while (scrollUp) {
-            try { //Scrolling to the top of the page
-                new TouchAction<>(_appiumDriver).press(PointOption.point(fromX, fromY))
-                        .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(2))).moveTo(PointOption.point(endX, endY)).release()
-                        .perform();
-                try {
-                    elementFound = isDisplayed(element);
-                } catch (Exception e) {
-                    System.out.println("Element found. Quiting the loop");
-                }
-                System.out.println("ELEMENT NEEDED DISPLAYED: " + elementFound);
-                if (elementFound) {
-                    scrollUp = false;
-                }
-                try {
-                    if (!elementFound) {
-                        System.out.println("CONDITION TO CHECK ELEMENT ALREADY FOUND OR NEED TO SCROLL UP " + elementFound);
-                        //WebElement topElement = getFirstElementOfPage(textOfFirstElementOfPage);
-                        System.out.println("TOP ELEMENT : " + topElement.toString());
-                        System.out.println("TOP ELEMENT DISPLAYED : " + topElement.isDisplayed());
-                        if (isDisplayed(topElement)) {
-                            System.out.println("REACHED TOP OF SCREEN:::::: ");
-                            scrollUp = false;
-                        } else {
-                            System.out.println("HAVEN'T REACHED TOP OF SCREEN YET. SCROLLING UP AGAIN:::::: ");
-                        }
-                    } else {
-                        System.out.println("ELSE CONDITION TO CHECK ELEMENT ALREADY FOUND OR NEED TO SCROLL UP " + elementFound);
-                    }
-                } catch (Exception e) {
-                    System.out.println("EXCEPTION WHILE GOING UP TOP : " + e);
-                    scrollUp = true;
-                }
-            } catch (Exception e) {
-                System.out.println("EXCEPTION WHILE FINDING OBJECT : " + e);
-                scrollUp = true;
-            }
-
-        }
-        boolean scrollDown = true;
-        while (scrollDown) {
-            try {
-                new TouchAction((PerformsTouchActions) _appiumDriver)
-                        .press(PointOption.point(0, Startpoint))
-                        .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(2)))
-                        .moveTo(PointOption.point(0, scrollEnd))
-                        .release().perform();
-                if (isDisplayed(element)) {
-                    scrollDown = false;
-                }
-            } catch (Exception e) {
-                scrollDown = true;
-            }
-        }
-        System.out.println("Scroll done");
-    }
-
     public WebElement getFirstElementOfPage(String text) {
         String xpathFirstElementOfPage = "//*[text()='<text>']";
         String xpath = xpathFirstElementOfPage.replace("<text>", text);
@@ -1404,83 +1294,6 @@ public class BasePage extends DriverFactory {
         return element;
     }
 
-    public boolean checkFieldDisplayedInView(By element) {
-
-        if (_platFormName.equalsIgnoreCase("ios")) {
-            boolean isDisplayed = _driver.findElement(element).isDisplayed();
-            System.out.println("IS DISPLAYED : " + isDisplayed);
-            return isDisplayed;
-        } else if (_platFormName.equalsIgnoreCase("android")) {
-            boolean isDisplayed = _driver.findElement(element).isDisplayed();
-            System.out.println("IS DISPLAYED : " + isDisplayed);
-            return isDisplayed;
-        }
-        return false;
-    }
-
-    public boolean checkFieldDisplayedInView(WebElement element) {
-
-        if (_platFormName.equalsIgnoreCase("ios")) {
-            boolean isDisplayed = element.isDisplayed();
-            System.out.println("IS DISPLAYED : " + isDisplayed);
-            return isDisplayed;
-        } else if (_platFormName.equalsIgnoreCase("android")) {
-            boolean isDisplayed = element.isDisplayed();
-            System.out.println("IS DISPLAYED : " + isDisplayed);
-            return isDisplayed;
-        }
-        return false;
-    }
-
-    public void scrollTillElementFound(By by, WebElement labelFirstElementOfPage) {
-        WebElement element = _driver.findElement(by);
-        boolean loop = true;
-        while (loop) {
-            try {
-                if (!checkFieldDisplayedInView(element)) {
-                    scrollToView(element, labelFirstElementOfPage);
-                    System.out.println("Element NOT displayed on view port. SCROLLED DOWN");
-                } else {
-                    scrollDown();
-                    System.out.println("Element displayed on view port. QUITING THE LOOP");
-                    loop = false;
-                }
-            } catch (Exception e) {
-                loop = false;
-                System.out.println("EXCEPTION : " + e);
-            }
-        }
-    }
-
-    public void scrollTillElementFound(WebElement element, WebElement labelFirstElementOfPage) {
-        boolean loop = true;
-        while (loop) {
-            try {
-                if (!checkFieldDisplayedInView(element)) {
-                    scrollToView(element, labelFirstElementOfPage);
-                    System.out.println("Element NOT displayed on view port. SCROLLED DOWN");
-                } else {
-                    scrollDown();
-                    System.out.println("Element displayed on view port. QUITING THE LOOP");
-                    loop = false;
-                }
-            } catch (Exception e) {
-                scrollToView(element, labelFirstElementOfPage);
-                System.out.println("Element NOT displayed on view port. SCROLLED DOWN");
-            }
-        }
-    }
-
-    public void scrollDown() {
-        Dimension dimensions = _driver.manage().window().getSize();
-        int Startpoint = (int) (dimensions.getHeight() * 0.5);
-        int scrollEnd = (int) (dimensions.getHeight() * 0.1);
-        new TouchAction((PerformsTouchActions) _appiumDriver)
-                .press(PointOption.point(0, Startpoint))
-                .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(2)))
-                .moveTo(PointOption.point(0, scrollEnd))
-                .release().perform();
-    }
 
     public int generateRandomValueBetweenRange(int max, int min) {
         Random rn = new Random();
@@ -1491,16 +1304,6 @@ public class BasePage extends DriverFactory {
         List<Map<String, String>> list = dataTable.asMaps(String.class, String.class);
         Assert.assertTrue(list.size() >= 1, "Data not found. Please mention the data in gherkin datatable format");
         return list;
-    }
-
-    public String retrieveJSONOutputDataFromPegaAPI(String refNumber) throws InterruptedException {
-        String pegaWorkEndpoint = testEnvironment.getPegaHost().trim() + " " + refNumber;
-        System.out.println("Pega work case endpoint : " + pegaWorkEndpoint);
-        String childCaseFromResponse = pegaAPICall(pegaWorkEndpoint, getPropertyValue("CHILD_CASE_XPATH"));
-        String childCase = childCaseFromResponse.split(" ")[1];
-        String childCaseResponseEndPoint = testEnvironment.getPegaHost().trim() + " " + childCase;
-        System.out.println("Child case endpoint : " + childCaseResponseEndPoint);
-        return pegaAPICall(childCaseResponseEndPoint, getPropertyValue("JSONOUTPUT_XPATH"));
     }
 
     public Object createJsonParser(String jsonString) {
@@ -1523,65 +1326,39 @@ public class BasePage extends DriverFactory {
         }
         return data;
     }
-
-
-    public String pegaAPICall(String endPoint, String xpath) throws InterruptedException {
-        String userName = testEnvironment.getPegaUserName().trim();
-        String password = testEnvironment.getPegaPassword().trim();
-        boolean objectExists = false;
-        PegaAPIConnection pegaAPIConnection = new PegaAPIConnection();
-        int count = 0;
-        String json = "";
-        int retryCount = Integer.parseInt(getPropertyValue("RETRY_COUNT"));
-        int retryInterval = Integer.parseInt(getPropertyValue("RETRY_INTERVAL"));
-        while (!(objectExists) && count <= retryCount) {
-            try {
-                Response response = pegaAPIConnection.doGetRequest(endPoint, userName, password);
-                json = getJsonDataFromPegaAPIUsingXpath(response, xpath);
-                if (!json.equals("")) {
-                    objectExists = true;
-                } else {
-                    TimeUnit.SECONDS.sleep(retryInterval);
-                    count++;
-                    System.out.println("Retrieval of Json object from Pega API using xpath : " + xpath + " failed. Possibly pega hasn't received a response back from OnDuty. Retrying => Attempt : " + count);
-                }
-            } catch (Exception e) {
-                TimeUnit.SECONDS.sleep(retryInterval);
-                count++;
-                System.out.println("Retrieval of Json object from Pega API using xpath : " + xpath + " failed. Possibly pega hasn't received a response back from OnDuty. Retrying => Attempt : " + count);
-            }
-        }
-        if (!objectExists) {
-            Assert.fail("Object not found in pega api response. Xpath : " + xpath);
-        }
-        return json;
-    }
-
-    protected String getJsonDataFromPegaAPIUsingXpath(Response response, String xpath) throws InterruptedException {
-
-        String json = "";
+    /* verify text of an object with expected result
+     * @param testObject - webelement
+     * @param texttoverify - exepected text
+     */
+    public void verifyText(WebElement testObject, String texttoverify) {
+        String actualtext = null;
+        String expected = null;
         try {
-            json = response.jsonPath().getString(xpath);
+           // this.wait.until(ExpectedConditions.elementToBeClickable(testObject)).click();
+            expected = texttoverify.trim().replaceAll("\\s+", "").toLowerCase();
+            actualtext = testObject.getText().trim().replaceAll("\\s+", "").toLowerCase();
+            Assert.assertEquals(actualtext, expected);
         } catch (Exception e) {
-            System.out.println("Xpath not found. " + xpath);
+            Assert.fail("Verification failed for actual value: " + actualtext + " and expected value: " + expected);
         }
-        return json;
     }
-
-    public Object retrievePegaCaseAPIContent(String refNumber) {
-        Object json = "";
-        String pegaWorkEndpoint = testEnvironment.getPegaHost().trim() + " " + refNumber;
-        String userName = testEnvironment.getPegaUserName().trim();
-        String password = testEnvironment.getPegaPassword().trim();
+    /* verify partial text of an object
+     * @param testObject - webelement
+     * @param texttoverify
+     */
+    public void verifyTextPartially(WebElement testObject, String texttoverify){
         try{
-            PegaAPIConnection pegaAPIConnection = new PegaAPIConnection();
-            Response response = pegaAPIConnection.doGetRequest(pegaWorkEndpoint, userName, password);
-            json = response.jsonPath().getJsonObject("content");
-        }catch (Exception e){
-            Assert.fail("Unable to retrieve Case Info Data for \"content\" of " + refNumber + " . check api connection");
+            String expected = texttoverify.trim().replaceAll("\\s+","").toLowerCase();
+            String actualtext = testObject.getText().trim().replaceAll("\\s+","").toLowerCase();
+            System.out.println(expected);
+            System.out.println(actualtext);
+            if(actualtext.contains(expected)){
+                Assert.assertTrue(true,"Partial text verification successful");
+            }else{
+                Assert.fail("Partial verification failed");
+            }
+        }catch(Exception e){
+            System.out.println("Error found " + e.getMessage());
         }
-        return json;
     }
-
-
-}
+    }
