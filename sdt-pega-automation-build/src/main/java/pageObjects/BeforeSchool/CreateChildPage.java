@@ -41,11 +41,12 @@ public class CreateChildPage extends BasePage {
 
         sendKeysToWebElement(firstName,generateFirstName());
         sendKeysToWebElement(surName,generateSurName());
+//        sendKeysToWebElement(dob,addOrSubtractDaysFromToday("sub",0));
         sendKeysToWebElement(dob,getAppData().getElement("CREATE_CHILD","DOB"));
         selectFromDropDownbyValue(ethnicity1,getAppData().getElement("CREATE_CHILD","ETHNICITY1"));
         waitAndClickElement(newChildGender);
         waitAndClickElement(saveButtonOnChildInformationPage);
-        geoCodeErrorHandlerButton.click();
+        waitAndClickElement(geoCodeErrorHandlerButton);
 
     }
     //********* NAME GENERATOR **********************

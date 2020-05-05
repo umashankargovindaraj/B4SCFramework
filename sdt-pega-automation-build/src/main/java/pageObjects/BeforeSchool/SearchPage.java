@@ -23,6 +23,9 @@ public class SearchPage extends BasePage {
     @FindBy(how = How.XPATH, using = "//input[@id='ctl00__pageContentPlaceHolder__searchAllButton']")
     private WebElement searchAllDHBbutton;
 
+    @FindBy(how = How.XPATH, using = "//input[@id='ctl00__pageContentPlaceHolder__searchButton']")
+    private WebElement searchButtonInAllocationTabForCoordinatorLogin;
+
 //**************************  ASSIGN PROVIDER TO THE NEW CHILD  *******************************************************
 
     @FindBy(how = How.XPATH, using = "//a[text()='Assign Provider']")
@@ -37,6 +40,9 @@ public class SearchPage extends BasePage {
     @FindBy(how = How.XPATH, using = "//div [@class='AspNet-GridView']/table/tbody/tr/td[3]/a")
     private WebElement surNameLink;
 
+    @FindBy(how = How.XPATH, using = "//div [@class='AspNet-GridView']/table/tbody/tr/td[8]")
+    private WebElement NHINumberLink;
+
     //************************* WEB ELEMENT NOT USED ********************************************************************
 
     @FindBy(how = How.XPATH, using = "//input[@id='ctl00__pageContentPlaceHolder__givenName__textBox']")
@@ -50,12 +56,22 @@ public class SearchPage extends BasePage {
 
  //************************************************************************************************************************
     public String generateRandomNAHINumber() {
+//        boolean flag = true;
+//        String NHI = null;
+//        while (flag) {
+//            NHI = RandomStringUtils.randomAlphabetic(3).toUpperCase() + RandomStringUtils.randomNumeric(4);
+//            if (IsValidNHINumberFormat(NHI)) {
+//                flag = false;
+//            }
+//        }
         boolean flag = true;
-        String NHI = null;
-        while (flag) {
+        String NHI=null;
+        while (flag){
             NHI = RandomStringUtils.randomAlphabetic(3).toUpperCase() + RandomStringUtils.randomNumeric(4);
-            if (IsValidNHINumberFormat(NHI)) {
-                flag = false;
+            if(!(NHI.contains("I")||NHI.contains("O"))){
+                if(IsValidNHINumberFormat(NHI)){
+                    flag = false;
+                }
             }
         }
         System.out.println("Valid NHI Number is " + NHI);
@@ -132,11 +148,16 @@ public class SearchPage extends BasePage {
 
     public void searchWithNHINumber(){
 
-//      String storedNhiNumber=getAppData().getFromMap("NHI_NUMBER");  /* used when creating new NHI number from scratch */
-        String storedNhiNumber="XQP4710";  /* hardcode NHI number for intermediate test */
+      String storedNhiNumber=getAppData().getFromMap("NHI_NUMBER");  /* used when creating new NHI number from scratch */
+        //String storedNhiNumber="UQT9330";  /* hardcode NHI number for intermediate test */
         System.out.println("Stored NHI Number"+storedNhiNumber);
         managementNhi.sendKeys(storedNhiNumber);
-        System.out.println("Entered the stored NHI Number ");
+//        String fName=getAppData().getFromMap("FirstName");
+//        existingFirstName.sendKeys(fName);
+//        String sName=getAppData().getFromMap("SurName");
+//        existingFirstName.sendKeys(sName);
+//        System.out.println("Search firstname: "+fName);
+//        System.out.println("Search surname: "+sName);
     }
 
     public void clickAllDHBButton(){
@@ -152,6 +173,15 @@ public class SearchPage extends BasePage {
     public void surNameLinkClick(){
 
         waitAndClickElement(surNameLink);
+    }
+
+    public void clickSearchButtonandConfirmChildReturnedtoCoordinator() {
+        searchWithNHINumber();
+        waitAndClickElement(searchButtonInAllocationTabForCoordinatorLogin);
+        String storedNhiNumber=getAppData().getFromMap("NHI_NUMBER");
+        System.out.println("Stored NHI Number"+storedNhiNumber);
+        verifyText(NHINumberLink, getAppData().getFromMap("NHI_NUMBER"));
+
     }
 
 }

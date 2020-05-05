@@ -1334,7 +1334,7 @@ public class BasePage extends DriverFactory {
         String actualtext = null;
         String expected = null;
         try {
-           // this.wait.until(ExpectedConditions.elementToBeClickable(testObject)).click();
+            wait.until(ExpectedConditions.elementToBeClickable(testObject));
             expected = texttoverify.trim().replaceAll("\\s+", "").toLowerCase();
             actualtext = testObject.getText().trim().replaceAll("\\s+", "").toLowerCase();
             Assert.assertEquals(actualtext, expected);
@@ -1349,6 +1349,7 @@ public class BasePage extends DriverFactory {
     public void verifyTextPartially(WebElement testObject, String texttoverify){
         try{
             String expected = texttoverify.trim().replaceAll("\\s+","").toLowerCase();
+            wait.until(ExpectedConditions.elementToBeClickable(testObject));
             String actualtext = testObject.getText().trim().replaceAll("\\s+","").toLowerCase();
             System.out.println(expected);
             System.out.println(actualtext);
