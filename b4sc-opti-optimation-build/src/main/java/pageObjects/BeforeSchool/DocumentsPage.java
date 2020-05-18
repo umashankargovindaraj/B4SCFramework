@@ -5,7 +5,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
-import org.testng.Assert;
 
 public class DocumentsPage extends BasePage {
 
@@ -20,9 +19,6 @@ public class DocumentsPage extends BasePage {
 
     @FindBy(how = How.XPATH, using = "//input[@id='ctl00__pageContentPlaceHolder__documentUpload__fileUpload__fileUpload']")
     private WebElement addfile;
-
-    @FindBy(how = How.XPATH, using = "//input[@id='ctl00__pageContentPlaceHolder__documents_ctl02__checkOut']")
-    private WebElement verifyUpload;
 
     public void clickDocumentsLink(){
         waitAndClickElement(documentsPageLink);
@@ -43,11 +39,5 @@ public class DocumentsPage extends BasePage {
 
     public void clickUploadButton(){
     waitAndClickElement(uploadButton);
-    }
-
-    public void verifyFileUploaded(){
-
-        isElementDisplayed(verifyUpload);
-       // Assert.fail("Currently upload function is displaying exception dev environment, this step need to be updated for UAT");
     }
 }

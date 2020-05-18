@@ -42,7 +42,9 @@ public class ReturnChildToCoordinatorPage extends BasePage {
         checkPopupIsVisible();
         isAlertPresent();
         closeAlertPopupBox();
-//        verifyTextPartially(verifyCoordinatorReturnConfimationText,getAppData().getElement("RETURNCHILDTOCOORDINATOR","VERIFYTEXT"));
+        verifyTextPartially(verifyCoordinatorReturnConfimationText,getAppData().getElement("RETURNCHILDTOCOORDINATOR","VERIFYTEXT"));
+        System.out.println("Status Of the Questionnaire:" + verifyCoordinatorReturnConfimationText.getText());
+
     }
 
     public void enterProviderNotes(){

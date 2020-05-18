@@ -1,4 +1,4 @@
-package features.StepDefinitions;
+package features.B4SC.StepDefinitions;
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;

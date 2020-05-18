@@ -45,10 +45,10 @@ public class GrowthCheckPage extends BasePage {
         waitAndClickElement(growthCheck_AddNewButton);
         sendKeysToWebElement(growthCheck_Height,getAppData().getElement("GROWTHCHECK","HEIGHT"));
         sendKeysToWebElement(growthCheck_Weight,getAppData().getElement("GROWTHCHECK","WEIGHT"));
-        sendDateToWebElement(growthCheck_DateEntered,addOrSubtractDaysFromToday("sub",22));
+        sendKeysToWebElement(growthCheck_DateEntered,addOrSubtractDaysFromToday("sub",22));
 //        sendKeysToWebElement(growthCheck_DateEntered,getAppData().getElement("GROWTHCHECK","DATEENTERED"));
         //waitAndClickElement(growthCheck_CalculatePercentilesButton);
-        sendDateToWebElement(growthCheck_DateCompleted,addOrSubtractDaysFromToday("sub",22));
+        sendKeysToWebElement(growthCheck_DateCompleted,addOrSubtractDaysFromToday("sub",22));
 //        sendKeysToWebElement(growthCheck_DateCompleted,getAppData().getElement("GROWTHCHECK","DATECOMPLETED"));
         selectFromDropDownbyIndex(growthCheck_Outcome,1);
         sendKeysToWebElement(growthCheck_Notes,getAppData().getElement("GROWTHCHECK","NOTES"));

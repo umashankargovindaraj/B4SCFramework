@@ -1,4 +1,4 @@
-package features.StepDefinitions;
+package features.B4SC.StepDefinitions;
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
@@ -26,11 +26,5 @@ public class DocumentsStep extends DriverFactory {
     public void clickUploadButton() {
         _DocumentsPage.clickUploadButton();
 
-    }
-
-    @And("verify upload is successful")
-    public void verifyUploadIsSuccessful() throws InterruptedException{
-        Thread.sleep(3000);
-        _DocumentsPage.verifyFileUploaded();
     }
 }

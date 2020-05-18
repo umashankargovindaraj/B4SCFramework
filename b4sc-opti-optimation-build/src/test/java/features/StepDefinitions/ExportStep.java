@@ -1,4 +1,4 @@
-package features.StepDefinitions;
+package features.B4SC.StepDefinitions;
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
@@ -14,10 +14,5 @@ public class ExportStep extends DriverFactory {
     @Then("click Export button to export partial child")
     public void clickExportButtonToExportPartialChild() {
         _ExportPage.clickExportButton();
-    }
-
-    @And("verify export is successful")
-    public void verifyExportIsSuccessful() {
-        _ExportPage.verifyExportCompletedText();
     }
 }
