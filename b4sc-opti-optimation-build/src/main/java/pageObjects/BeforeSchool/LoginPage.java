@@ -63,7 +63,6 @@ public class LoginPage extends BasePage {
             chooseCoordinatorLocalAdmin();
         }
         enterCredentialAndLogin(userName,userPassword);
-        //organisation will be selected only when it is multi organisation user
         if(!(organisation.equalsIgnoreCase("none"))){
             selectOrganisation(organisation);
         }
@@ -113,8 +112,8 @@ public class LoginPage extends BasePage {
             }
 
             public void logoutApplication() throws InterruptedException {
-               // waitAndclickElementUsingJS(logOutButton);
-                logOutButton.click();
+                waitAndclickElementUsingJS(logOutButton);
+//                logOutButton.click();
             }
 }
 
