@@ -2,6 +2,8 @@ package pageObjects.BeforeSchool;
 
 import libs.BasePage;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 
@@ -23,7 +25,7 @@ public class ChildHealthCheckPage extends BasePage {
     @FindBy(how = How.XPATH, using = "//input[@id='ctl00__pageContentPlaceHolder__generalHealth__wearsGlasses__no']")
     private WebElement questionnaire_WearGlasses;
 
-    @FindBy(how = How.XPATH, using = "//input[@id='ctl00__pageContentPlaceHolder__generalHealth__grommetsTubes__radioButton_1']")
+    @FindBy(how = How.XPATH, using = "//input[@id='ctl00__pageContentPlaceHolder__generalHealth__grommetsTubes__radioButton_0']")
     private WebElement questionnaire_EarGrommetsInserted;
 
     @FindBy(how = How.XPATH, using = "//input[@id='ctl00__pageContentPlaceHolder__generalHealth__earOtherProblems__no']")

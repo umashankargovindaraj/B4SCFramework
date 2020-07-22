@@ -1,4 +1,4 @@
-package features.B4SC.StepDefinitions;
+package features.StepDefinitions;
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
@@ -59,5 +59,17 @@ public class SearchSteps extends DriverFactory {
     @Then("user click search button and confirm the child record is returned to coordinator successfully")
     public void userClickSearchButtonAndConfirmTheChildRecordIsReturnedToCoordinatorSuccessfully() {
         _SearchPage.clickSearchButtonandConfirmChildReturnedtoCoordinator();
+    }
+
+
+
+    @And("confirm child is assigned to the provider")
+    public void confirmChildIsAssignedToTheProvider() {
+        _SearchPage.confirmChildAssignedToProvider();
+    }
+
+    @And("click provider MgmtPage SearchResult surName link")
+    public void clickProviderMgmtPageSearchResultSurNameLink() {
+        _SearchPage.providerMgmtPageSurNameLinkClick();
     }
 }

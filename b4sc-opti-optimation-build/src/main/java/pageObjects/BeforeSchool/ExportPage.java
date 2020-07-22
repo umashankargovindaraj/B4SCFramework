@@ -17,6 +17,10 @@ public class ExportPage extends BasePage {
     @FindBy(how = How.XPATH, using = "//div[@class='SectionBlock Clearfix']/h1")
     private WebElement childExportLabel;
 
+    @FindBy(how = How.XPATH, using = "//table[@class='AspNet-GridView']/tbody/tr[2]/td[3]")
+    private WebElement exportTextCompleted;
+
+
     public void clickExportTab(){
         waitAndClickElement(exportTabClick);
     }
@@ -28,5 +32,9 @@ public class ExportPage extends BasePage {
         }
         waitAndClickElement(exportButton);
         System.out.println("export button clicked" +exportButton);
+    }
+
+    public void verifyExportCompletedText(){
+        verifyText(exportTextCompleted,"Child was exported");
     }
 }

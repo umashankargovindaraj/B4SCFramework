@@ -51,8 +51,8 @@ public class DistanceVisionPage extends BasePage {
 
     public void distanceVisionReferred(){
         waitAndClickElement(vision_AddNewButton);
-        sendKeysToWebElement(vision_DateCompleted,getAppData().getElement("HEARING","DATECOMPLETED"));
         selectFromDropDownbyIndex(vision_Outcome,2);
+        sendDateToWebElement(vision_DateCompleted,addOrSubtractDaysFromToday("ADD",0));
         waitAndClickElement(vision_SaveButton);
         _ConsentPage.b4SchoolLink();
         verifyText(vision_StatusInProgressValidation,getAppData().getElement("HEARING","VERIFYREFERRED"));

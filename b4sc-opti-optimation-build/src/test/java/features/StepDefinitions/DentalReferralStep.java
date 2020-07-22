@@ -1,4 +1,4 @@
-package features.B4SC.StepDefinitions;
+package features.StepDefinitions;
 
 import cucumber.api.java.en.And;
 import libs.DriverFactory;
@@ -13,7 +13,7 @@ public class DentalReferralStep extends DriverFactory {
     }
 
     @And("now go back to dental Check Referral and change the status from In Progress to Completed")
-    public void nowGoBackToDentalCheckReferralAndChangeTheStatusFromInProgressToCompleted() {
+    public void nowGoBackToDentalCheckReferralAndChangeTheStatusFromInProgressToCompleted() throws InterruptedException {
         _DentalReferralPage.dentalCheckReferralCompleted();
     }
 }

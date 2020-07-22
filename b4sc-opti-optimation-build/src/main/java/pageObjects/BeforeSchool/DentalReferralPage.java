@@ -59,17 +59,21 @@ public class DentalReferralPage extends BasePage {
         System.out.println("Status Of the Questionnaire:" + dental_StatusInProgressVerify.getText());
     }
 
-    public void dentalCheckReferralCompleted(){
+    public void dentalCheckReferralCompleted() throws InterruptedException {
 
         waitAndClickElement(dentalCreatedDateLink);
         waitAndClickElement(liftTheLipReferral_AlreadyAddedLink);
         selectFromDropDownbyValue(dental_referralStatus,getAppData().getElement("DENTALREFERRAL","REFERRALSTATUS"));
-
+        //Thread.sleep(2000);
 //        sendKeysToWebElement(dental_dateAckReceived,getAppData().getElement("DENTALREFERRAL","DATE"));
-        sendKeysToWebElement(dental_dateAckReceived,addOrSubtractDaysFromToday("sub",0));
-        sendKeysToWebElement(dental_dateInterventionStarted,addOrSubtractDaysFromToday("sub",0));
-        sendKeysToWebElement(dental_dateInterventionCompleted,addOrSubtractDaysFromToday("sub",0));
-        sendKeysToWebElement(dental_dateReferralCompleted,addOrSubtractDaysFromToday("sub",0));
+        sendDateToWebElement(dental_dateAckReceived,addOrSubtractDaysFromToday("sub",0));
+        //Thread.sleep(2000);
+        sendDateToWebElement(dental_dateInterventionStarted,addOrSubtractDaysFromToday("sub",0));
+        //Thread.sleep(2000);
+        sendDateToWebElement(dental_dateInterventionCompleted,addOrSubtractDaysFromToday("sub",0));
+        //Thread.sleep(2000);
+        sendDateToWebElement(dental_dateReferralCompleted,addOrSubtractDaysFromToday("sub",0));
+        //Thread.sleep(2000);
         waitAndClickElement(dental_liftTheLipReferralSaveButton);
         verifyTextPartially(dental_StatusInProgressVerify,getAppData().getElement("DENTALREFERRAL","VERIFYWHETHERCOMPLETED"));
         System.out.println("Status Of the Questionnaire:" + dental_StatusInProgressVerify.getText());

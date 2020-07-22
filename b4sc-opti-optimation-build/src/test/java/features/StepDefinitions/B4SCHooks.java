@@ -1,4 +1,4 @@
-package features.B4SC.StepDefinitions;
+package features.StepDefinitions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

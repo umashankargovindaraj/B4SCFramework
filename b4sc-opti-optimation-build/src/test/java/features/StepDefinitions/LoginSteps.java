@@ -1,4 +1,4 @@
-package features.B4SC.StepDefinitions;
+package features.StepDefinitions;
 
 import com.sun.tools.xjc.Driver;
 import cucumber.api.java.en.And;

@@ -16,7 +16,7 @@ public class ApplicationData {
     private Map<String,String> transientDataMap  = new HashMap<>();
 
     public ApplicationData() {
-        JSONToMap("testData.json");
+        JSONToMap("testDataUat.json");
     }
 
     public void putToMap(String key, String value) {

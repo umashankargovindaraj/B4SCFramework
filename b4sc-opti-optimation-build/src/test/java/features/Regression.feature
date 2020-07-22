@@ -1,4 +1,4 @@
-@All
+@REGRESSION_All
 Feature: End to End Scenarios for B4 School Application
 
   @one
@@ -62,7 +62,7 @@ Feature: End to End Scenarios for B4 School Application
     Then confirm that child record will not be closed since Dental Check referral is still in progress
     And logout from current user
 
-  @three
+  @three @rerun
   Scenario: E2E Testcase3: Search existing child who has parent consent and complete B4SC checks - All checks not complete and some referrals outstanding
     Given user is logged in as "provider"
     Then the Before School home page should be displayed
@@ -105,7 +105,10 @@ Feature: End to End Scenarios for B4 School Application
     And search with the NHI Number obtained
     And user search all DHB for search results
     And click assign provider link
-    And click surName link
+   And click Management tab
+    # below line will verify and confirm that the assigned child in step 107 is showing in the Management tab search results of the provider
+    And confirm child is assigned to the provider
+    And click provider MgmtPage SearchResult surName link
     And click Allocation History link in Child Information page and fill Return Child to Coordinator fields
     And logout from current user
     Then login back as coordinator with organisation "coordinator"
@@ -133,7 +136,7 @@ Feature: End to End Scenarios for B4 School Application
     Then close the child record as No consent given and no health checks can be added
     And logout from current user
 
-  @six
+  @six @rerun
   Scenario: E2E Testcase6_Search existing child who has parent consent and complete B4SC checks - Close outstanding referrals and then Close Check
     Given user is logged in as "provider"
     Then the Before School home page should be displayed
