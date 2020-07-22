@@ -1,4 +1,4 @@
-package features.B4SC.StepDefinitions;
+package features.StepDefinitions;
 
 import cucumber.api.java.en.Then;
 import libs.DriverFactory;

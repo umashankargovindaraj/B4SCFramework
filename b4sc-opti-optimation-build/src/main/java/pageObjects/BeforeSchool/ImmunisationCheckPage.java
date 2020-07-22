@@ -68,8 +68,8 @@ public class ImmunisationCheckPage extends BasePage {
 //        selectFromDropDownbyIndex(immunisationCheck_FiveMonths,3);
 //        selectFromDropDownbyIndex(immunisationCheck_FifteenMonths,3);
 //        selectFromDropDownbyIndex(immunisationCheck_FourYears,3);
-        sendKeysToWebElement(immunisationCheck_DateCompleted,getAppData().getElement("IMMUNISATION","DATECOMPLETED"));
         selectFromDropDownbyIndex(immunisationCheck_Outcome,5);
+        sendDateToWebElement(immunisationCheck_DateCompleted,addOrSubtractDaysFromToday("add",0));
 //        sendKeysToWebElement(immunisationCheck_Notes,getAppData().getElement("IMMUNISATION","NOTESREFERRED"));
         waitAndClickElement(immunisationCheck_SaveButton);
         _ConsentPage.b4SchoolLink();

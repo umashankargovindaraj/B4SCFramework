@@ -6,8 +6,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
-
-
+import org.testng.Assert;
 
 
 public class CreateChildPage extends BasePage {
@@ -64,7 +63,7 @@ public class CreateChildPage extends BasePage {
 
         sendKeysToWebElement(firstName,generateFirstName());
         sendKeysToWebElement(surName,generateSurName());
-        sendKeysToWebElement(dob,addOrSubtractDaysFromToday("sub",1835));
+        sendDateToWebElement(dob,addOrSubtractDaysFromToday("sub",1835));
 //        sendKeysToWebElement(dob,getAppData().getElement("CREATE_CHILD","DOB"));
         selectFromDropDownbyValue(ethnicity1,getAppData().getElement("CREATE_CHILD","ETHNICITY1"));
         waitAndClickElement(newChildGender);
@@ -75,10 +74,10 @@ public class CreateChildPage extends BasePage {
     }
 
     public void enterChildDateOfDeath(){
-        sendKeysToWebElement(dod,addOrSubtractDaysFromToday("sub",0));
+        sendDateToWebElement(dod,addOrSubtractDaysFromToday("sub",0));
         sendTABKey(dod);
         waitAndClickElement(saveButtonOnChildInformationPage);
-        verifyText(confirmChildDeath,getAppData().getElement("CREATE_CHILD","DATEOFDEATH"));
+        verifyText(confirmChildDeath,getAppData().getElement("CREATE_CHILD","DECEASEDSTATUS"));
         System.out.println("child death confirmed: " + confirmChildDeath.getText());
     }
 
@@ -86,7 +85,7 @@ public class CreateChildPage extends BasePage {
 
         sendKeysToWebElement(firstName, editFirstName());
         sendKeysToWebElement(surName, editSurName());
-        sendKeysToWebElement(dob, addOrSubtractDaysFromToday("sub", 1825));
+        sendDateToWebElement(dob, addOrSubtractDaysFromToday("sub", 1825));
         String nhi = _SearchPage.generateRandomNAHINumber();
         sendKeysToWebElement(nhiAtChildInfoPage, nhi);
         getAppData().putToMap("EDITED_NHI",nhi);
@@ -97,13 +96,13 @@ public class CreateChildPage extends BasePage {
 
 
     public void childNotPresent(){
-        if (childRemoved.getText().isEmpty()) {
-            System.out.println("The child record is removed sucessfully");
+        try{
+            if (!(childRemoved.getText().isEmpty())) {
+                Assert.fail("Child with removed NHI number is present");
+            }
+        }catch (Exception e){
+            Assert.fail("error in childnotpresent() " + e.getMessage());
         }
-        else {
-            System.out.println("Child record still exist");
-        }
-
     }
 
     //********* NAME GENERATOR **********************

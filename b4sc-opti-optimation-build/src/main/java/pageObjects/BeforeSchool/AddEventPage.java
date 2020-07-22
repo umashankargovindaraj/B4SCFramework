@@ -36,8 +36,8 @@ public class AddEventPage extends BasePage {
     }
     public void AddEventDetails(){
         selectFromDropDownbyIndex(contactMethod,1);
-        sendKeysToWebElement(contactDate, addOrSubtractDaysFromToday("sub", 0));
         selectFromDropDownbyIndex(addEventOutcome,1);
+        sendDateToWebElement(contactDate, addOrSubtractDaysFromToday("sub", 0));
         waitAndClickElement(addEventSaveButton);
 
     }

@@ -82,7 +82,17 @@ public class BasePage extends DriverFactory {
                 System.out.println("Successfully clicked on the WebElement: " + "<" + element.toString() + ">");
                 clicked = true;
                 Thread.sleep(100);
-            } catch (Exception e) {
+            }catch (ElementClickInterceptedException eleInt ){
+                System.out.println("Exception ElementClickInterceptedException caught. Applying fix for exception");
+                try{
+                    Actions action = new Actions(_driver);
+                    action.moveToElement(element).click().build().perform();
+                    clicked = true;
+                }catch(Exception ea){
+                    Assert.fail("Unable to click on the WebElement with Actions class, using locator: " + "<" + element.toString() + ">");
+                }
+
+            }catch (Exception e) {
                 System.out.println("Unable to wait and click on WebElement, Exception: " + e.getMessage());
                 Assert.fail("Unable to wait and click on the WebElement, using locator: " + "<" + element.toString() + ">");
             }
@@ -156,15 +166,41 @@ public class BasePage extends DriverFactory {
     }
 
     public void sendKeysToWebElement(WebElement element, String textToSend) {
+        int slowDownSpeed = 50;
         try {
+            Thread.sleep(200);
             wait.until(ExpectedConditions.elementToBeClickable(element));
             element.clear();
-            element.sendKeys(textToSend);
+            if(textToSend.length() < 10){
+                slowDownSpeed = 100;
+            }
+            for (int i = 0;i < textToSend.length(); i++){
+                element.sendKeys(textToSend.substring(i, i+1));
+                Thread.sleep(slowDownSpeed);
+            }
+            Thread.sleep(400);
             //sendTABKey(element);
             System.out.println("Successfully Sent the following keys: '" + textToSend + "' to element: " + "<" + element.toString() + ">");
         } catch (Exception e) {
-            System.out.println("Unable to locate WebElement: " + "<" + element.toString() + "> and sendResultsToElasticSearch the following keys: " + textToSend);
-            Assert.fail("Unable to keys to WebElement, Exception: " + e.getMessage());
+            Assert.fail("Unable to keys to WebElement, element - " + element + " for text " + textToSend + " Exception: " + e.getMessage());
+        }
+    }
+
+    public void sendDateToWebElement(WebElement element, String dateToSend) {
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(element));
+            element.clear();
+            Thread.sleep(1000);
+            for (int i = 0;i < dateToSend.length(); i++){
+                element.sendKeys(dateToSend.substring(i, i+1));
+                Thread.sleep(300);
+            }
+            Thread.sleep(500);
+            sendTABKey(element);
+            Thread.sleep(1500);
+            System.out.println("Successfully Sent the following keys: '" + dateToSend + "' to element: " + "<" + element.toString() + ">");
+        } catch (Exception e) {
+            Assert.fail("Unable to keys to WebElement, element - " + element + " for text " + dateToSend + " Exception: " + e.getMessage());
         }
     }
 
